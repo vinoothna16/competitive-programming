@@ -1,0 +1,31 @@
+class Trie: 
+    
+    def __init__(self):
+        self.root = {}
+    
+    def insert(self, key, val): 
+        node = self.root 
+        for ch in key: 
+            node = node.setdefault(ch, {})
+            node["#"] = node.get("#", 0) + val
+    
+    def search(self, prefix): 
+        node = self.root
+        for ch in prefix: 
+            if ch not in node: return 0 
+            node = node[ch]
+        return node["#"]
+
+
+class MapSum:
+
+    def __init__(self):
+        self.trie = Trie()
+        self.seen = {}
+
+    def insert(self, key: str, val: int) -> None:
+        self.trie.insert(key, val - self.seen.get(key, 0))
+        self.seen[key] = val
+
+    def sum(self, prefix: str) -> int:
+        return self.trie.search(prefix)
