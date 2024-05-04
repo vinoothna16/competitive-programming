@@ -1,0 +1,28 @@
+class WordFilter:
+    def __init__(self, words):
+        self.prefixes = defaultdict(list)
+        self.suffixes = defaultdict(list)
+
+        for idx, word in enumerate(words):
+            for i in range(len(word) + 1):
+                prefix = word[:i]
+                suffix = word[i:]
+                
+                if not self.prefixes[prefix] or self.prefixes[prefix][0] != idx:
+                    self.prefixes[prefix].insert(0, idx)
+                if not self.suffixes[suffix] or self.suffixes[suffix][0] != idx:
+                    self.suffixes[suffix].insert(0, idx)
+
+    def f(self, pref, suff):
+        if pref not in self.prefixes or suff not in self.suffixes:
+            return -1
+
+        p, s = 0, 0
+        while p < len(self.prefixes[pref]) and s < len(self.suffixes[suff]):
+            if self.prefixes[pref][p] == self.suffixes[suff][s]:
+                return self.prefixes[pref][p]
+            if self.prefixes[pref][p] < self.suffixes[suff][s]:
+                s += 1
+            else:
+                p += 1
+        return -1
